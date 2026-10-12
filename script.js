@@ -1,3 +1,6 @@
+// Live render full-stack serverless backend core endpint URL Target 
+const API_ENDPOINT="https://ayur-prakriti-app.onrender.com";
+
 // ==========================================================================
 // PRAKRITI AI NUTRITION PLATFORM — CONSOLIDATED SCRIPT
 // One section-switcher, one quiz engine, one compile step. No dead code.
@@ -429,7 +432,7 @@ window.triggerCameraCapture = triggerCameraCapture;
 
 // Points at your Flask server's /api/scan-plant route (see your scan_plant_endpoint).
 // Change this to your real deployed URL once it's not running on localhost.
-const SCAN_PLANT_API_URL = "http://127.0.0.1:5000/api/scan-plant";
+const SCAN_PLANT_API_URL = "https://ayur-prakriti-app.onrender.com";
 
 async function scanPlantCore(blob) {
     const resultDisplay = document.getElementById('taxonomy-display-panel');
@@ -473,7 +476,7 @@ async function scanPlantCore(blob) {
         console.error('[scanPlantCore] request failed:', error);
         resultDisplay.innerHTML = `
             <img src="${previewUrl}" style="max-width:200px; border-radius:8px; margin-bottom:12px;">
-            <p style="color:#c0392b;">Analysis failed: ${error.message}. Is your Flask server running and reachable at ${SCAN_PLANT_API_URL}?</p>
+            <p style="color:#c0392b;">Analysis failed: ${error.message}. Is your Render cloud web service live and awake??</p>
         `;
     }
 }
