@@ -1,0 +1,370 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prakriti AI Nutrition Platform</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7f4;
+            color: #2c3e2c;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 650px;
+            width: 100%;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            margin-top: 20px;
+            box-sizing: border-box;
+        }
+
+        /* 📑 THE MULTI-PAGE VIEW SEPARATION CONTROLS */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            width: 100%;
+            max-width: 650px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: #e2ede2;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            color: #2c3e2c;
+            transition: all 0.2s ease;
+        }
+        .tab-btn.active {
+            background: #4c8f4c;
+            color: white;
+            box-shadow: 0 2px 8px rgba(76, 143, 76, 0.2);
+        }
+
+        /* 🙈 HIDE INACTIVE PAGES COMPLETELY BY DEFAULT */
+        .page-content {
+            display: none;
+            width: 100%;
+        }
+        .page-content.active {
+            display: block;
+        }
+
+        /* THE FLIPBOOK PAGE HIDING MECHANICS */
+        .book-page {
+            display: none;
+        }
+        .book-page.active{
+            display: block;
+        }
+
+        /* 🎴 HOVER DOSHA DECK MODULES */
+        .card-deck {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .dosha-card {
+            background: #ffffff;
+            border-top: 4px solid #4caf50;
+            border-radius: 8px;
+            padding: 20px;
+            width: 180px;
+            min-height: 220px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: left;
+        }
+        .extended-lakshanas {
+            max-height: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            border-top: 1px dashed #e0e0e0;
+            margin-top: 10px;
+            font-size: 11px;
+            color: #666;
+        }
+        .dosha-card:hover { transform: translateY(-4px); box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
+        .dosha-card:hover .extended-lakshanas { max-height: 180px; opacity: 1; visibility: visible; padding-top: 8px; }
+        ul { padding-left: 12px; margin: 5px 0; font-size: 11px; color: #444; line-height: 1.4; }
+
+        /* 🧬 HIGH-AESTHETIC STRETCHED ELLIPSE ELEMENT */
+        .ellipse-nadi-container {
+            border: 3px double #ff5722;
+            border-radius: 50% / 30%;
+            padding: 35px 25px;
+            margin: 15px auto;
+            max-width: 580px;
+            background: #fafdfa;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        /* 📖 MODERN INTERACTIVE FLIPBOOK LAYOUT */
+        .flipbook-container {
+            max-width: 420px;
+            margin: 20px auto;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-left: 6px solid #ff5722;
+            border-radius: 4px 8px 8px 4px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-align: left;
+            min-height: 180px;
+        }
+        /* Hide alternative pages by default! */
+        .book-page {
+            display: none;
+        }
+        .book-page.active {
+            display: block;
+        }
+
+           /* Premium Dashboard Button Styles */
+    .button-dock {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin: 20px 0;
+    }
+    .nav-btn {
+        background: #ffffff;
+        color: #2e7d32;
+        border: 2px solid #2e7d32;
+        padding: 10px 20px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .nav-btn:hover {
+        background: #2e7d32;
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(46,125,50,0.2);
+    }
+    /* Active highlight style for the core action button */
+    .nav-btn-active {
+        background: #2e7d32 !important;
+        color: #ffffff !important;
+    }
+    </style>
+</head>
+<body>
+   
+    <!-- index.html — Clean, styled horizontal button dock -->
+<div class="menu-card" style="background: #ffffff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; max-width: 600px; margin: 20px auto;">
+    
+    <h2 style="font-size: 1.8rem; font-weight: 700; color: #2e7d32; margin-bottom: 5px;">🌱 Prakriti Nutrition Engine</h2>
+    <p style="color: #666; margin-bottom: 25px; font-size: 0.95rem;">Discover your unique metabolic blueprint based on clinical BAMS frameworks.</p>
+    
+    <!-- Button container with flexbox to make them align beautifully in a row -->
+    <div class="button-dock" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+        <button class="nav-btn" onclick="showSection('shloka')" style="background-color: #62ba66; color: #ffffff;">1. Foundational Shloka</button>
+        <button class="nav-btn" onclick="showSection('dosha')" style="background-color: #62ba66; color: #ffffff;">2. Dosha Attributes</button>
+        <button class="nav-btn" onclick="showSection('quiz')" style="background-color: #62ba66; color: #ffffff;">3. Diagnostic Quiz</button>
+        <button class="nav-btn" onclick="showSection('nadi')" style="background-color: #62ba66; color: #ffffff;">4. Nadi Pariksha</button>
+        <button class="nav-btn" onclick="showSection('vision')" style="background-color: #62ba66; color: #ffffff;">5.Scan Plant Core</button>
+    </div>
+</div>
+
+    <!-- 📜 TAB 1: FOUNDATIONAL SHLOKA 3D FLIP CONTAINER -->
+<div id="shloka-section" class="page-content container" style="display: none; padding: 20px;">
+    <div style="perspective: 1000px; display: flex;  max-width: 650px; justify-content: center; margin-top: 30px;">
+        
+        <!-- 🔄 THE MASTER FLIP BOX MATRIX -->
+        <div class="flip-card-inner" onclick="this.classList.toggle('flipped')" style="position: relative; width: 100%; max-width: 650px; min-height: 480px; text-align: left; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; cursor: pointer;">
+            
+            <!-- 📄 THE FRONT SIDE: TEXT DATA LINES -->
+            <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: #f4f9f4; border-left: 6px solid #4c8f4c; border-radius: 16px; padding: 30px; box-shadow: 0 8px 24px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: center;">
+                <p style="font-family: 'Noto Serif Devanagari', serif; font-size: 18px; color: #2c3e2c; line-height: 1.6; text-align: center; font-weight: bold; margin-bottom: 12px;">
+                    "वायुः पित्तं कफश्चेति त्रयो दोषाः समासतः।<br>विकृताविकृता देहं घ्नन्ति ते वर्तयन्ति च ॥"
+                </p>
+                <p style="text-align: center; font-style: italic; font-size: 13px; color: #555; margin-bottom: 15px;">
+                    — Ashtanga Hridayam, Sutrasthana (1.6)
+                </p>
+                <p style="font-size: 13px; color: #444; line-height: 1.6; margin-bottom: 15px; text-align: justify;">
+                    <strong>English Translation:</strong> "Vata, Pitta, and Kapha are the three operational life forces (Doshas) governing the human ecosystem. When they exist in their pristine, balanced parameters, they sustain and nourish life. The exact millisecond they fall out of balance, they introduce decay and disease."
+                </p>
+                <p style="font-size: 13px; color: #333; line-height: 1.6; text-align: justify; margin: 0;">
+                    <strong>The Biological Law:</strong> According to Ayurveda, an imbalance in one or more of these life forces is the fundamental cause of both physical and mental illness. The word dosha translates to 'fault' and the reason why the life forces are called faults is not because there is something wrong in the life force itself, but because they have an innate tendency to move towards disease, if balance is not maintained. This is the reason why Vagabhata, the author of Ashtanga Hridayam, which translates to the heart or essence of the eight limbs, says that an imbalance leads to decay and disease. The forces that are responsible for vitality are also responsible for destruction if they are excessively imbalanced.
+                </p>
+                <p style="text-align: center; font-size: 15px; color: #666; margin-top: 20px; font-family: monospace; letter-spacing: 1px;">
+                    ✨ HOVER OR TAP TO FLIP CARD ✨
+                </p>
+            </div>
+
+            <!-- 🖼️ THE BACK SIDE: THE SAGE PORTRAIT REVEAL -->
+            <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; transform: rotateY(180deg); background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxXcjARUt_mYILN-Olur2dRIkHQmyw0hjM2I_lTgzE5XeCwJKK_9uzdM4&s=10') center/cover no-repeat; border-radius: 16px; border: 4px solid #4c8f4c; box-shadow: 0 12px 36px rgba(0,0,0,0.08); display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden;">
+                <!-- Elegant gradient text shield to protect text readability over the image -->
+                <div style="background: linear-gradient(to top, rgba(44,62,44,0.95), rgba(44,62,44,0.4), transparent); padding: 30px; color: white; text-align: center;">
+                    <h4 style="margin: 0 0 8px 0; color: #a3cca3; letter-spacing: 1px; font-weight: bold; font-size: 20px;">SAGE VAGBHATA</h4>
+                    <p style="margin: 0; font-size: 15px; line-height: 1.5; font-style: italic; opacity: 0.95; color:bisque">
+                        "Timeless Scholar of the Ashtanga Hridayam — Unifying the Essence of Ayurvedic Healing Frameworks."
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+    
+
+    <!-- 🎴 REVEALS ONLY HOVER DOSHA DETAILS -->
+     <div id="dosha-section" class="page-content container" style="background:transparent; box-shadow: none; padding:0;">
+    <div class="card-deck">
+        <!-- VATA CARD -->
+        <div class="dosha-card" style="border-top-color: #5c9ce6;">
+            <h3>💨 Vata Dosha</h3>
+            <p style="font-size: 11px; font-weight: bold; color: #5c9ce6; margin: 5px 0;">Primary Attributes:</p>
+            <ul>
+                <li><strong>Rooksha:</strong> Dryness in hair, skin, and textures.</li>
+                <li><strong>Laghu:</strong> Lightweight, lean physical frame.</li>
+            </ul>
+            <!-- Hiding until cursor mouse node enters boundary layout -->
+            <div class="extended-lakshanas">
+                <p style="font-weight: bold; margin: 0 0 5px 0; color: #2c3e2c;">Extended Lakshanas:</p>
+                <ul>
+                    <li><strong>Sheeta:</strong> Intolerance to cold draft nodes.</li>
+                    <li><strong>Khara:</strong> Roughness of skin and tissue walls.</li>
+                    <li><strong>Chala:</strong> Highly volatile, fast-shifting focus loops.</li>
+                    <li><strong>Sookshma:</strong> Slender, thin physical frame indicative of a high metabolism</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- PITTA CARD -->
+        <div class="dosha-card" style="border-top-color: #ff5722;">
+            <h3>🔥 Pitta Dosha</h3>
+            <p style="font-size: 11px; font-weight: bold; color: #ff5722; margin: 5px 0;">Primary Attributes:</p>
+            <ul>
+                <li><strong>Ushna:</strong> High metabolic heat processing.</li>
+                <li><strong>Teekshna:</strong> Sharp, immediate appetite loops.</li>
+            </ul>
+            <div class="extended-lakshanas">
+                <p style="font-weight: bold; margin: 0 0 5px 0; color: #2c3e2c;">Extended Lakshanas:</p>
+                <ul>
+                    <li><strong>Saram:</strong> Tendency toward systemic liquidity channels or loose bowel movements.</li>
+                    <li><strong>Katu:</strong> Tendency toward internal acidity, burning sensations or sharp biofeedbacks.</li>
+                    <li><strong>Laghu:</strong>Lightweight, lean physical frame and bone structure.</li>
+                    <li><strong>Dravam:</strong>Liquidity in the body</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- KAPHA CARD -->
+        <div class="dosha-card" style="border-top-color: #4caf50;">
+            <h3>🌱 Kapha Dosha</h3>
+            <p style="font-size: 11px; font-weight: bold; color: #4caf50; margin: 5px 0;">Primary Attributes:</p>
+            <ul>
+                <li><strong>Snigdha:</strong> Deep natural systemic moisture.</li>
+                <li><strong>Guru:</strong> Dense, solid, highly stable framework.</li>
+            </ul>
+            <div class="extended-lakshanas">
+                <p style="font-weight: bold; margin: 0 0 5px 0; color: #2c3e2c;">Extended Lakshanas:</p>
+                <ul>
+                    <li><strong>Manda:</strong> Slow-pacing, highly deliberate loops.</li>
+                    <li><strong>Mritsna:</strong> Slimy or sticky mucus variables.</li>
+                    <li><strong>Sthira:</strong> Immense architectural patience and memory archiving.</li>
+                    <li><strong>Slakshana:</strong>Smoothness of the skin texture, tissue integrity nodes.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <!-- THE LIVE ACTIVE QUIZ ANCHOR NODE,ONLY THE QUIZ IS REVEALED -->
+    <div id="quiz-section" class="page-content container">
+        <h3 style="color:#2c3e2c; font-weight: bold; margin-bottom: 20px;">Ayurvedic metabolic Profile Assessment</h3>
+        <div id="quiz-container-slot"></div>
+    </div>
+
+    <!-- 🫀 PLACEMENT POINT: PASTE THE NEW NADI PARIKSHA COMPONENT DIRECTLY HERE -->   
+     <div id="nadi-section" class="page-content container">
+        <div class="ellipse-nadi-container">
+            <h3 class="nadi-heading" style="font-family: 'Segoe UI'; font-weight: bold; font-style: italic; color: #ff5722; font-size: 22px;">Nadi Pariksha Pulse Wave Telemetry</h3>
+            <p class="wave-body-text" style="font-family: 'Segoe UI'; color: #3e5c43; font-size: 14px; line-height: 1.6;">
+            THE ORIGIN OF PULSE WAVE ANALYSIS OR NADI PARIKSHA: 
+            First meticulously codified in clinical manuals like the Sarangadhara Samhita and later expanded in the Nadi Vijnana, Nadi Pariksha is the ultimate ancinet method of tactile artery telemetry. By placing three fingers on the radial artery wrist node right below the thumb, a physician reads the frequency, velocity and wave movement patterns ofyour biological cycles.
+            <p>WHY BEATS PER MINUTE MATTER: 
+            Your heart rate isn't just a basic mechanical numbers. Instead, it is the key to understanding the real-time velocity of your internal metabolic state. High heat (pitta) accelerates the blood flow speed, dryness/wind (Vata) causes erratic variations, and heavy density (Kapha) slows down the entire system stream. 
+             </p> 
+            </p>
+        </div> 
+        <!--MODERATE PAGES FLIPBOOK LAYER-->
+        <div class="flipbook-container">
+            <div id="book-page-1" class="book-page active">
+                <h4 style="margin-top: 0; color: #ff5722;"> Sarpa Nadi(Snake Pulse)</h4>
+                <p style="font-size: 12px; line-height: 1.5; color: #555;"> 
+                     <strong>BPM RANGE:</strong> 85 - 90+ Beats Per Minute<br><br>
+                     <strong>Wave Dynamics:</strong> High velocity, erratic, fast-shifting, and twisting. It reflects high wind and dry parametersinside the Vata System structure and slips rapidly beneath the fingers.
+                     </p>
+                     </div>
+                     <div id="book-page-2" class="book-page">
+                <h4 style="margin-top: 0; color: #ff5722;">• Manduka Nadi (Frog Pulse)</h4>
+                <p style="font-size: 12px; line-height: 1.5; color: #555;">
+                    <strong>BPM Range:</strong> 70 – 80 Beats Per Minute.<br><br>
+                    <strong>Wave Dynamics:</strong> Sharp, distinct, bounding and jumping. It strikes your fingers with clear force, reflecting peak metabolic heat and intensity. 
+                </p>
+            </div>
+
+            <div id="book-page-3" class="book-page">
+                <h4 style="margin-top: 0; color: #ff5722;">• Hansa Nadi (Swan Pulse)</h4>
+                <p style="font-size: 12px; line-height: 1.5; color: #555;">
+                    <strong>BPM Range:</strong> 60 – 70 Beats Per Minute.<br><br>
+                    <strong>Wave Dynamics:</strong> Deep, slow, steady and majestic. It moves with a steady, slow rhythm, reflecting immobility, stability and high moisture blocks. 
+                </p>
+            </div>
+        </div>
+
+        <!-- FLIP BOOK ACTION TRIGGER KEYS -->
+        <div style="display: flex; justify-content: center; gap: 15px; margin-top: 10px; margin-bottom: 20px;">
+            <button onclick="turnBookPage(-1)" style="background:#ff5722; color:white; border:none; padding:6px 12px; font-size:11px; border-radius:4px; cursor:pointer;">◀️ Previous Page</button>
+            <button onclick="turnBookPage(1)" style="background:#ff5722; color:white; border:none; padding:6px 12px; font-size:11px; border-radius:4px; cursor:pointer;">Next Page ▶️</button>
+        </div>
+
+</div> 
+<!-- ==========================================================================
+         5. AYURPRAKRITI COMPUTER VISION CORE (CORRECTED MESH)
+         ========================================================================== -->
+    <section id="vision-section" class="tab-content" style="display: none; padding: 20px; text-align: center;">
+        <h2 class="section-header" style="font-size: 1.8rem; font-weight: 700; color: #1b5e20; margin-bottom: 10px;">Advanced Computer Vision Core</h2>
+        <p class="section-subtitle" style="color: #555; margin-bottom: 20px;">Deducing taxonomy, morphologic markers, and genetic bract probability models.</p>
+        
+        <div class="action-dock" style="display: flex; justify-content: center; margin-bottom: 20px;">
+            <button id="scan-plant-core-btn" class="nav-btn interactive-btn" style="background-color: #2e7d32; color: white; padding: 10px 24px; border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">Scan Plant Core</button>
+        </div>
+
+        <div id="taxonomy-display-panel" style="font-style: italic; color: #666; margin-top: 15px;">
+            Awaiting high-resolution camera data payload...
+        </div>
+    </section>
+
+
+<!-- RECTIFIED RELATIVE JAVASCRIPT ENGINE LINK -->
+<script src="./script.js"></script>
+
+</body>
+</html>

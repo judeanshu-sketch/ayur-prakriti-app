@@ -1,0 +1,236 @@
+/* Optimized 3D Perspective Workspace for Card Interaction */
+.flashcard-wrapper {
+    perspective: 1000px;
+    width: 320px;
+    height: 220px;
+    margin: 20px;
+    display: inline-block;
+    vertical-align: top;
+    transform: translateZ(0); /* Anti-flicker rendering anchor */
+}
+
+/* The Core Rotating Asset Node */
+.flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+
+/* ⚡ The Stabilized Desktop Hover Trigger Gate (Uses Wrapper Hit-Box) */
+@media (hover: hover) {
+    .flashcard-wrapper:hover .flashcard-inner {
+        transform: rotateY(180deg);
+    }
+}
+
+/* Unified Mobile Tap Selector Class Support */
+.flashcard-inner.flipped {
+    transform: rotateY(180deg);
+}
+
+/* Shared Geometries for Front and Back Faces with Hidden Backface Protection */
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+    border-radius: 12px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    left: 0;
+    top: 0;
+}
+
+/* Front Face Visual Properties (The Identity Screen) */
+.card-front {
+    background: #eef5ee;
+    color: #2c3e2c;
+    border-left: 6px solid #4caf50;
+    z-index: 2;
+    transform: rotateY(0deg);
+}
+
+/* Back Face Visual Properties (The Clinical Lakshanas Screen) */
+.card-back {
+    background: #ffffff;
+    color: #1e2d1e;
+    border-right: 6px solid #4caf50;
+    transform: rotateY(180deg);
+    text-align: left;
+    align-items: flex-start;
+    z-index: 1;
+}
+
+/* List Component Inside Back Card Face */
+.lakshana-list {
+    margin: 0;
+    padding-left: 15px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Responsive Button Box Parameter Configuration */
+#quiz-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px auto;
+    max-width: 500px;
+    text-align: left;
+}
+
+/* Elite Interactive Button Aesthetics */
+.quiz-btn {
+    background: #ffffff;
+    color: #2c3e2c;
+    border: 2px solid #cbdccb;
+    border-radius: 8px;
+    padding: 14px 20px;
+    font-size: 15px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+/* High-Velocity Focus and Hover State Interception Gates */
+.quiz-btn:hover {
+    background: #eef5ee;
+    border-color: #4caf50;
+    color: #1e301e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.15);
+}
+
+.quiz-btn:active {
+    transform: translateY(0);
+}
+
+/* =========================================================================
+/* 🔄 INTERACTIVE 3D FLIP CARD LOGIC MECHANICS
+/* ========================================================================= */
+
+/* 1. Base Container Setup */
+.flip-card {
+    perspective: 1000px; /* Kept outside the media query so mobile tap animations render in 3D too */
+    width: 100%;
+    max-width: 650px;
+}
+
+/* 2. Desktop Hover Trigger Interface (Cleaned up) */
+@media (hover: hover) {
+    .flip-card:hover .flip-card-inner {
+        transform: rotateY(180deg);
+    }
+}
+
+/* 3. Unified Mobile Tap and Explicit State Selector Trigger */
+.flip-card-inner.flipped {
+    transform: rotateY(180deg);
+}
+
+/* AyurPrakriti Dynamic Motion and Animation Matrices */
+
+.interactive-btn {
+    background: linear-gradient(135deg, #2e7d32, #1b5e20);
+    color: #ffffff;
+    border: none;
+    padding: 12px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.interactive-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(27, 94, 32, 0.3);
+    background: linear-gradient(135deg, #388e3c, #2e7d32);
+}
+
+/* Organic Breathing Animation Loop for Processing States */
+.breathing-text {
+    animation: textBreathe 1.8s ease-in-out infinite;
+    color: #4caf50;
+    font-style: italic;
+}
+
+@keyframes textBreathe {
+    0%, 100% {
+        opacity: 0.6;
+        transform: scale(0.99);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.01);
+    }
+}
+
+/* Rapid Technical Color-Shifting Header for Successful Identifications */
+.color-shift-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    animation: technicalColorShift 8s linear infinite;
+}
+
+@keyframes technicalColorShift {
+    0% { color: #2e7d32; }   /* Pure Forest Green */
+    25% { color: #1565c0; }  /* Core Blueprint Blue */
+    50% { color: #d84315; }  /* High-Velocity Pitta Orange */
+    75% { color: #6a1b9a; }  /* Deep Architecture Purple */
+    100% { color: #2e7d32; } /* Return Loop */
+}
+
+.result-card {
+    background: #ffffff;
+    border-left: 5px solid #2e7d32;
+    padding: 20px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    text-align: left;
+}
+
+.therapeutic-alert {
+    background: #e8f5e9;
+    color: #1b5e20;
+    padding: 12px;
+    border-radius: 4px;
+    margin-top: 15px;
+    font-size: 0.95rem;
+} 
+
+  /* AyurPrakriti Modern Interactive Button Override */
+.interactive-btn {
+    background: #ffffff !important;
+    color: #2e7d32 !important;
+    border: 2px solid #2e7d32 !important;
+    padding: 8px 20px !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease-in-out !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+    margin: 5px !important;
+}
+
+.interactive-btn:hover {
+    background: #2e7d32 !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(46, 125, 50, 0.2) !important;
+}
